@@ -21,22 +21,24 @@
 */
 
 #include<windows.h>
-#include<stdio.h>
 //typedef from _SYSTEM_POWER_STATUS
 SYSTEM_POWER_STATUS status;
 
 int main(){            
     //GetSystemPowerStatus retrieves the power status of the system
     if(GetSystemPowerStatus(&status) != 0){
-        if(status.BatteryLifePercent == 255) 
-            MessageBox(NULL,"Unknown status [255]: unable to read the battery flag information.","Battery Level",MB_OK|0x00000040L);        
-        else if(status.BatteryLifePercent<=20 && status.ACLineStatus == 0)
-            MessageBox(NULL,"Battery level less than or equal to 20%%, please conect The AC power.","Battery level", MB_OK|0x00000030L);
-        else if(status.BatteryLifePercent>=90 && status.ACLineStatus == 1)
-            MessageBox(NULL,"Battery level greater than or equal to 90%%,, please desconect The AC power.","Battery level", MB_OK|0x00000030L);
+        while (1){
+            if(status.BatteryLifePercent == 255) 
+                MessageBox(NULL,"Unknown status [255]: unable to read the battery flag information.","Battery Level",MB_OK|0x00000040L);        
+            else if(status.BatteryLifePercent<=20 && status.ACLineStatus == 0)
+                MessageBox(NULL,"Battery level less than or equal to 20%%, please conect The AC power.","Battery level", MB_OK|0x00000030L);
+            else if(status.BatteryLifePercent>=90 && status.ACLineStatus == 1)
+                MessageBox(NULL,"Battery level greater than or equal to 90%%,, please desconect The AC power.","Battery level", MB_OK|0x00000030L);
+            Sleep(10000);
+        }
     }
-    else{
-        printf("Error: Can't get Information the System Power Status");
-    }       
+    else
+        MessageBox(NULL,"Error: Can't get Information the System Power Status.","Battery level", MB_OK|0x00000040L);
+            
     return 0;
 }
