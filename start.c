@@ -26,6 +26,7 @@
 
 //Path where saves and execute our program
 #define path "/ProgramData/Microsoft/Windows/Start Menu/Programs/StartUp/msgbp.exe"
+
 //typedef from _SYSTEM_POWER_STATUS
 SYSTEM_POWER_STATUS status;
 
@@ -55,20 +56,23 @@ void msgStatusBattery(){
 int main(){    
     //Hide console
     ShowWindow(GetConsoleWindow(), SW_HIDE);
-    
-    if(existFile()){                
-        //GetSystemPowerStatus retrieves the power status of the system
-        if(GetSystemPowerStatus(&status)){
-            while (1){
+        
+    if(existFile()){                        
+        while (1){
+            //GetSystemPowerStatus retrieves the power status of the system
+            if(GetSystemPowerStatus(&status)){            
                 msgStatusBattery();
+                //Sleep() suspends the execution of the program for one minute
                 Sleep(60000);
             }
-        }
-        else
-            MessageBox(NULL,"Error: Can't get Information the System Power Status.","Battery level - msgbp", MB_OK|0x00000010L);
+            else{
+                MessageBox(NULL,"Error: Can't get Information the System Power Status.","Battery level - msgbp", MB_OK|0x00000010L);
+                return 1;
+            }                
+        }        
     }else{
         MoveFile("./msgbp.exe", path);
-        MessageBox(NULL,"File have been moved to StartUp. Please restart to finish.","Battery level - msgbp", MB_OK|0x00000040L);        
+        MessageBox(NULL,"File have been moved to StartUp. Please restart to finish.","Battery level - msgbp", MB_OK|0x00000040L);
+        return 0;
     }       
-    return 0;
 }
